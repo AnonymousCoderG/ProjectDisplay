@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title will be set by JavaScript -->
+    <title>Project Video</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #0056b3; }
+        video { width: 100%; height: auto; border-radius: 5px; }
+        p { font-size: 1.1em; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- These elements are placeholders. JavaScript will fill them. -->
+        <h1 id="project-title">Loading...</h1>
+        
+        <div id="video-container">
+            <!-- The video player will be created here by JavaScript -->
+        </div>
+
+        <p id="project-description"></p>
+    </div>
+
+    <!-- 1. Load the project data first -->
+    <script src="data.js"></script>
+
+    <!-- 2. This script will do all the magic -->
+    <script>
+        // Wait for the page to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the project ID from the URL (e.g., ?id=hydraulic-crane)
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id');
+
+            // Find the project data in our 'projects' object from data.js
+            const project = projects[projectId];
+
+            if (project) {
+                // If the project is found, update the page content
+                document.title = project.title; // Update the browser tab title
+                document.getElementById('project-title').innerText = project.title;
+                document.getElementById('project-description').innerText = project.description;
+                
+                // Create the video player element
+                const videoPlayer = `
+                    <video controls>
+                        <source src="${project.videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+                document.getElementById('video-container').innerHTML = videoPlayer;
+
+            } else {
+                // If no project is found for that ID, show an error message
+                document.getElementById('project-title').innerText = "Project Not Found";
+                document.getElementById('project-description').innerText = "The project ID in the URL is not valid. Please check the QR code and try again.";
+            }
+        });
+    </script>
+
+</body>
+</html>
